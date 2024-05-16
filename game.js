@@ -79,13 +79,14 @@ class Game {
     update() {
         requestAnimationFrame(this.update);
 
-        // Ship
         this.context.clearRect(0, 0, this.board.width, this.board.height)
-        this.drawShip();
+
+        // Ship
+        this.context.drawImage(this.shipImg, this.ship.x, this.ship.y, this.ship.width, this.ship.height);
 
         // Alien
-        this.drawAlien();
-        this.createAliens();
+        //this.context.drawImage(this.alienImg, this.alien.x, this.alien.y, this.alien.width, this.alien.height);
+        
     }
     
     //Ship Movement
@@ -103,21 +104,21 @@ class Game {
     }
 
     //Create Aliens
-    createAliens(){
-        for (let column = 0; column < this.alienColumns; column++) {
-            for (let row = 0; row < this.alienRow; row++) {
+    createAlian(){
+        for(let c = 0; c < this.alienColumns; c++){
+            for(let r = 0; r < this.alienRows; r++){
                 let alien = {
                     img : this.alienImg,
-                    x : this.alienX + column * this.alienWidth,
-                    y : this.alienY + row * this.alienHeight,
+                    x : this.alienX,
+                    y : this.alienY,
                     width : this.alienWidth,
-                    height : this.alienHeight,
-                    alive : true
+                    height : this.alienHeight
                 }
-                this.alienArray.push(alien);
+                 this.alienArray.push(alien)
             }
+
         }
-        this.alienCount = this.alienArray.length;
+        this.alienCount = this.alienArray.length
     }
 }
 
@@ -146,16 +147,24 @@ class gameOn{
         this.gameContainer.style.height = `${this.height}vh`
         this.gameContainer.style.width = `${this.width}vw`
         this.gameContainer.style.display = 'block'
-        // this.gameScreen.appendChild(this.clockContainer);
     }
 }
 
     const insertCoinBtn =  document.getElementById('insert-coin')
 
     window.onload = () => {
+        let audioIntro = new Audio('9intro-song.mp3');
+        audioIntro.play();
+        audioIntro.volume = 0.1;
         
 
         function startGame(){
+            audioIntro.pause();
+            let audioGame = new Audio('10game-song.mp3');
+            audioGame.play();
+            audioGame.volume = 0.1;
+
+           
            // Create the Board on Game Screen
             const game = new Game(32, 20, 20);
 
@@ -167,23 +176,24 @@ class gameOn{
             game.shipImg.src = "5ship.png";
             game.shipImg.onload = () => {
                 // Display Ship on Board
-                //game.drawShip(); 
-                //game.update();
+                game.drawShip();
+                game.update();
+                
             };
 
             // Create Aliens On Board
             game.alienImg = new Image();
             game.alienImg.src = "6alien.png";
-            game.alienImg.onload = () => {
-                // Display Aliens on Board
-                game.update()
-            }
+            game.createAlian();
 
             document.addEventListener("keydown", function(e){
                 game.moveShip(e);
             })
         }
             insertCoinBtn.addEventListener('click', () => {
+            let audioInsertCoin = new Audio('8Arcade_INSERT_COIN.mp3')
+            audioInsertCoin.play();
+            audioInsertCoin.volume = 0.1;
             console.log('Insert Coin Button Clicked');
             startGame();
            
